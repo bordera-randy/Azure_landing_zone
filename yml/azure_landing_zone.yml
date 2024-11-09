@@ -1,0 +1,57 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+parameters:
+  - name: terraformVersion
+    type: string
+    default: '1.0.11'
+  - name: azureServiceConnection
+    type: string
+    default: 'your-azure-service-connection'
+  - name: tfWorkingDirectory
+    type: string
+    default: 'terraform'
+  - name: storageAccountName
+    type: string
+    default: 'your-storage-account-name'
+  - name: containerName
+    type: string
+    default: 'your-container-name'
+  - name: tfstateKey
+    type: string
+    default: 'your-tfstate-key'
+  - name: storageAccountKey
+    type: string
+    default: 'your-storage-account-key'
+
+stages:
+- stage: Terraform
+  jobs:
+  - template: /Users/bordera/GitHub/Azure_landing_zone/yml/jobs/terraform_job.yml
+    parameters:
+      terraformVersion: ${{ parameters.terraformVersion }}
+      azureServiceConnection: ${{ parameters.azureServiceConnection }}
+      tfWorkingDirectory: ${{ parameters.tfWorkingDirectory }}
+      storageAccountName: ${{ parameters.storageAccountName }}
+      containerName: ${{ parameters.containerName }}
+      tfstateKey: ${{ parameters.tfstateKey }}
+      storageAccountKey: ${{ parameters.storageAccountKey }}
+      - stage: Approval
+        jobs:
+        - job: Approval
+          pool: server
+          steps:
+          - task: ManualValidation@0
+            inputs:
+              notifyUsers: 'user@example.com'
+              instructions: 'Please review the Terraform plan and approve to proceed.'
+              onTimeout: 'reject'
+              timeout: '43200' # 12 hours
+              - stage: CodeScan
+                jobs:
+                - template: /Users/bordera/GitHub/Azure_landing_zone/yml/jobs/code_scan_job.yml
+                  parameters:
+                    azureServiceConnection: ${{ parameters.azureServiceConnection }}
