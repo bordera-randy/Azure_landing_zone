@@ -78,15 +78,13 @@ resource "azurerm_log_analytics_workspace" "log_analytics" {
     retention_in_days   = 7
 }
 
-# Assign Azure Policy Definitions
+# Assign Azure Policy Assignments
 resource "azurerm_subscription_policy_assignment" "audit_public_network_access" {
     name                 = "audit-public-network-access"
     policy_definition_id = local.Audit_Public_Network_Access
     subscription_id   = data.azurerm_subscription.current.id
     description = "Audit Public Network Access"
     display_name = "Audit Public Network Access"
-    
-
 }
 
 resource "azurerm_subscription_policy_assignment" "cis_benchmark_v2_0_0" {
@@ -106,9 +104,9 @@ resource "azurerm_subscription_policy_assignment" "hipaa" {
 }
 
 resource "azurerm_subscription_policy_assignment" "nist_sp_800_53_v5" {
-    name                 = "nist-sp-800-53-v5"
-    policy_definition_id = local.NIST_SP_800_53_v5
-    subscription_id   = data.azurerm_subscription.current.id
-    description = "NIST SP 800-53 v5"
-    display_name = "NIST SP 800-53 v5"
+    name                    = "nist-sp-800-53-v5"
+    policy_definition_id    = local.NIST_SP_800_53_v5
+    subscription_id         = data.azurerm_subscription.current.id
+    description             = "NIST SP 800-53 v5"
+    display_name            = "NIST SP 800-53 v5"
 }
