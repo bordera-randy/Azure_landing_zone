@@ -1,20 +1,20 @@
 
 # Create the Management Group
 resource "azurerm_management_group" "root_mg" {
-    display_name = "local.managmentgroupname"
-    name         = "local.managmentgroupname"
+    display_name = local.managmentgroupname
+    name         = local.managmentgroupname
     
 }
 
 resource "azurerm_management_group" "prd_mg" {
     display_name = "Production"
-    name         = "local.managmentgroupname-prd"
+    name         = "${local.managmentgroupname}-prd" 
     parent_management_group_id = azurerm_management_group.root_mg.id
 }
 
 resource "azurerm_management_group" "poc_mg" {
     display_name = "Proof of Concept"
-    name         = "local.managmentgroupname-poc"
+    name         = "${local.managmentgroupname}-poc" 
     parent_management_group_id = azurerm_management_group.root_mg.id
 }
 
@@ -75,38 +75,6 @@ resource "azurerm_log_analytics_workspace" "log_analytics" {
     resource_group_name = azurerm_resource_group.common_rg.name
     location            = azurerm_resource_group.common_rg.location
     sku                 = "PerGB2018"
-    retention_in_days   = 7
-}
-
-# Assign Azure Policy Assignments
-resource "azurerm_subscription_policy_assignment" "audit_public_network_access" {
-    name                 = "audit-public-network-access"
-    policy_definition_id = local.Audit_Public_Network_Access
-    subscription_id   = data.azurerm_subscription.current.id
-    description = "Audit Public Network Access"
-    display_name = "Audit Public Network Access"
-}
-
-resource "azurerm_subscription_policy_assignment" "cis_benchmark_v2_0_0" {
-    name                 = "cis-benchmark-v2-0-0"
-    policy_definition_id = local.CIS_Benchmark_v2_0_0
-    subscription_id   = data.azurerm_subscription.current.id
-    description = "CIS Benchmark v2.0.0"
-    display_name = "CIS Benchmark v2.0.0"
-}
-
-resource "azurerm_subscription_policy_assignment" "hipaa" {
-    name                 = "hipaa"
-    policy_definition_id = local.HIPAA
-    subscription_id   = data.azurerm_subscription.current.id
-    description = "HIPAA"
-    display_name = "HIPAA"
-}
-
-resource "azurerm_subscription_policy_assignment" "nist_sp_800_53_v5" {
-    name                    = "nist-sp-800-53-v5"
-    policy_definition_id    = local.NIST_SP_800_53_v5
-    subscription_id         = data.azurerm_subscription.current.id
-    description             = "NIST SP 800-53 v5"
-    display_name            = "NIST SP 800-53 v5"
+    retention_in_days   = 30
+    
 }

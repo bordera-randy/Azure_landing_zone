@@ -1,7 +1,7 @@
 locals {
-    az_tenant_id                    = "76195987-c9c2-4822-8771-4c31d24951a5"
-    az_subscription_id              = "a1c4dba0-b0eb-4923-8c56-061b0d014d56"
-    mg_group_id                     = "b1c4dba0-b0eb-4923-8c56-061b0d014d56"
+    az_tenant_id                    = "9509bb4a-3c51-4dd9-b158-a3cd39773650"
+    az_subscription_id              = "f3009a4a-f5ac-4df3-a05c-65d06d961dad"
+    mg_group_id                     = "9509bb4a-3c51-4dd9-b158-a3cd39773650"
     managmentgroupname              = "DEMO-MG"
     infra_environment               = "dev"
     azure_location                  = "Central US"
